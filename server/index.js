@@ -15,6 +15,8 @@ const server = http.createServer((req, res) => {
     res.end('here is get method');
   }
 
+  res.setHeader('Content-type', 'application/json'); // 设置 res.end()返回的字符串的类型是怎么样的
+
   if (req.method === 'POST') {
     console.log('content-Type', req.headers['content-type']);
     let postData = '';
@@ -28,7 +30,7 @@ const server = http.createServer((req, res) => {
 
     req.on('end', () => {
       console.log('end post data', postData);
-      res.end(postData);
+      res.end(postData); // postData 格式是 string
     });
   }
 });
