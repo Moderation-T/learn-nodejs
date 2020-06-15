@@ -3,6 +3,8 @@ const queryString = require('querystring');
 
 // 创建一个服务
 const server = http.createServer((req, res) => {
+  res.setHeader('Content-type', 'application/json'); // 设置 res.end()返回的字符串的类型是怎么样的 设置返回格式为 json
+
   // req.method 判断前端是用什么方法进行请求的 GET POST PUT ...
   if (req.method === 'GET') {
     // 获取 URL
@@ -14,8 +16,6 @@ const server = http.createServer((req, res) => {
     // 结束了 返回一个 hi nodejs 字符串给前端
     res.end('here is get method');
   }
-
-  res.setHeader('Content-type', 'application/json'); // 设置 res.end()返回的字符串的类型是怎么样的
 
   if (req.method === 'POST') {
     console.log('content-Type', req.headers['content-type']);
