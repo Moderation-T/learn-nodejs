@@ -1,39 +1,27 @@
-const http = require('http');
-const queryString = require('querystring');
+const blogHandle = require('./src/blogHandle');
+const userHandle = require('./src/userHandle');
 
-// 创建一个服务
-const server = http.createServer((req, res) => {
-  res.setHeader('Content-type', 'application/json'); // 设置 res.end()返回的字符串的类型是怎么样的 设置返回格式为 json
+const serverHandle = (req, res) => {
+  res.setHeader('Content-type', 'application/json');
+  const url = req.url;
+  req.path = url.split('?')[0];
 
-  // req.method 判断前端是用什么方法进行请求的 GET POST PUT ...
-  if (req.method === 'GET') {
-    // 获取 URL
-    const url = req.url;
-    // console.log('query', url.split('?')[1]); // a=100&b=200
-    req.query = queryString.parse(url.split('?')[1]); // { a: '100', b: '200' }
-    // console.log(req.query); // { a: '100', b: '200' }
-
-    // 结束了 返回一个 hi nodejs 字符串给前端
-    res.end('here is get method');
+  const blogData = blogHandle(req, res);
+  if (blogData) {
+    res.end(JSON.stringify(blogData));
+    return;
   }
 
-  if (req.method === 'POST') {
-    console.log('content-Type', req.headers['content-type']);
-    let postData = '';
-
-    // 接收数据
-    req.on('data', (chunk) => {
-      console.log(chunk);
-
-      postData += chunk.toString();
-    });
-
-    req.on('end', () => {
-      console.log('end post data', postData);
-      res.end(postData); // postData 格式是 string
-    });
+  const userData = userHandle(req, res);
+  if (userData) {
+    res.end(JSON.stringify(userData));
+    return;
   }
-});
 
-// 设置监听端口 3000
-server.listen(3000);
+  // 找不到路由的处理
+  res.writeHead(404, { 'Content-type': 'text/plain' });
+  res.write('404 Not Found');
+  res.end();
+};
+
+module.exports = serverHandle;
