@@ -1,5 +1,5 @@
-const blogHandle = require('./src/blogHandle');
-const userHandle = require('./src/userHandle');
+const blogHandle = require('./src/routers/blogHandle');
+const userHandle = require('./src/routers/userHandle');
 
 const serverHandle = (req, res) => {
   res.setHeader('Content-type', 'application/json');
