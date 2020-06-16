@@ -12,16 +12,21 @@ class BaseModel {
   }
 }
 
-class Success extends BaseModel {
+class SuccessModel extends BaseModel {
   constructor(data, message) {
     super(data, message);
     this.errorCode = 0;
   }
 }
 
-class Success extends BaseModel {
+class FailModel extends BaseModel {
   constructor(data, message) {
     super(data, message);
     this.errorCode = -1;
   }
 }
+
+module.exports = {
+  SuccessModel,
+  FailModel,
+};
