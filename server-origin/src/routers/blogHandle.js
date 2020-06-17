@@ -1,4 +1,4 @@
-const { getBlogList, getBlogDetail } = require('../controllers/blog');
+const { getBlogList, getBlogDetail, newBlog, updateBlog, deleteBlog } = require('../controllers/blog');
 const { SuccessModel, FailModel } = require('../models/resModel');
 
 const blogHandle = (req, res) => {
@@ -20,21 +20,24 @@ const blogHandle = (req, res) => {
 
   // 新增一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/new') {
-    return { msg: '新增一篇博客' };
+    const postData = req.body;
+    const newBlogData = newBlog(postData);
+    return new SuccessModel(newBlogData);
   }
 
   // 更新一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/update') {
-    return {
-      msg: '更新一篇博客',
-    };
+    const id = req.query.id || '';
+    const postData = req.body;
+    const updateBlogData = updateBlog(id, postData);
+    return new SuccessModel(updateBlogData);
   }
 
   // 删除一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/del') {
-    return {
-      msg: '删除一篇博客',
-    };
+    const id = req.query.id || '';
+    const deleteBlogData = deleteBlog(id);
+    return new SuccessModel(deleteBlogData);
   }
 };
 
