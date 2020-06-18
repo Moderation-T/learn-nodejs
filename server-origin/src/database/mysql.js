@@ -14,7 +14,6 @@ function exec(sql) {
       if (err) {
         reject(err);
       }
-
       resolve(result);
     });
   });

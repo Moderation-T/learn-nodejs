@@ -12,7 +12,7 @@ const getBlogList = (author, keyword) => {
     sql += `and keyword like %${keyword}%`;
   }
 
-  sql += `order by createitem desc`;
+  sql += `order by createtime desc`;
 
   return exec(sql);
 };
@@ -20,21 +20,28 @@ const getBlogList = (author, keyword) => {
 // 获取一篇博客的内容
 
 const getBlogDetail = (id) => {
-  return { title: 'A', date: '2020-02-22', author: 'A', id: '1' };
+  const sql = `select * from blogs where id=${id}`;
+
+  return exec(sql);
 };
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  return postData;
+  const sql = `insert into blogs(title,content,createtime,author) values(${postData.title},${postData.content},${postData.createtime},${postData.author})`;
+
+  return exec(sql);
 };
 
 // 更新一条博客 接收 post 上来的数据 更新数据库中信息
 const updateBlog = (id, postData) => {
-  return { id, ...postData };
+  const sql = `update blogs set title=${postData.title},content=${postData.content},createtime=${postData.createtime},author=${postData.author} where id=${id}`;
+
+  return exec(sql);
 };
 
 // 删除一条博客 从数据库删除相应 id 的博客
 const deleteBlog = (id) => {
+  const sql = `delete from blogs where id=${id}`;
   return { id };
 };
 

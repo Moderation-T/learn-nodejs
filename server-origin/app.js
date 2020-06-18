@@ -42,6 +42,7 @@ const serverHandle = (req, res) => {
   // 先获取 postData 的值放到 req.body 中去，然后里边的路由就可以从 req.body 中获取 post data 的值了
   getPostData(req).then((postData) => {
     req.body = postData;
+    console.log(postData);
 
     blogHandle(req, res).then((blogData) => {
       if (blogData) {
