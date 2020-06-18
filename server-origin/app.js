@@ -43,17 +43,19 @@ const serverHandle = (req, res) => {
   getPostData(req).then((postData) => {
     req.body = postData;
 
-    const blogData = blogHandle(req, res);
-    if (blogData) {
-      res.end(JSON.stringify(blogData));
-      return;
-    }
+    blogHandle(req, res).then((blogData) => {
+      if (blogData) {
+        res.end(JSON.stringify(blogData));
+        return;
+      }
+    });
 
-    const userData = userHandle(req, res);
-    if (userData) {
-      res.end(JSON.stringify(userData));
-      return;
-    }
+    userHandle(req, res).then((userData) => {
+      if (userData) {
+        res.end(JSON.stringify(userData));
+        return;
+      }
+    });
 
     // 找不到路由的处理
     res.writeHead(404, { 'Content-type': 'text/plain' });

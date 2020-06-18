@@ -6,9 +6,13 @@ const blogHandle = (req, res) => {
   if (req.method === 'GET' && req.path === '/api/blog/list') {
     const author = req.query.author || '';
     const keyword = req.query.author || '';
-    const listData = getBlogList(author, keyword);
 
-    return new SuccessModel(listData);
+    return getBlogList(author, keyword).then((listData) => {
+      const res = JSON.parse(JSON.stringify(listData));
+      console.log(res);
+
+      return new SuccessModel(res);
+    });
   }
 
   // 获取一篇博客的内容
