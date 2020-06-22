@@ -9,7 +9,6 @@ const blogHandle = (req, res) => {
 
     return getBlogList(author, keyword).then((listData) => {
       const res = JSON.parse(JSON.stringify(listData));
-      console.log(res);
 
       return new SuccessModel(res);
     });
@@ -45,8 +44,6 @@ const blogHandle = (req, res) => {
   if (req.method === 'POST' && req.path === '/api/blog/del') {
     const id = req.query.id || '';
     return deleteBlog(id).then((deleteBlogData) => {
-      console.log(deleteBlogData);
-
       return new SuccessModel(deleteBlogData);
     });
   }

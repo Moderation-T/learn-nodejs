@@ -39,31 +39,21 @@ const newBlog = (postData) => {
 // 更新一条博客 接收 post 上来的数据 更新数据库中信息
 const updateBlog = (id, postData) => {
   const sql = `update blogs set title='${postData.title}',content='${postData.content}',createtime=${postData.createtime},author='${postData.author}' where id=${id}`;
-  console.log('update sql', sql);
 
   // return exec(sql);
-  return exec(sql)
-    .then((updateData) => {
-      console.log('exec updateData', updateData);
-
-      if (updateData.affectedRows > 0) {
-        return true;
-      }
-      return false;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  return exec(sql).then((updateData) => {
+    if (updateData.affectedRows > 0) {
+      return true;
+    }
+    return false;
+  });
 };
 
 // 删除一条博客 从数据库删除相应 id 的博客
 const deleteBlog = (id) => {
   const sql = `delete from blogs where id=${id}`;
-  console.log(sql);
 
   return exec(sql).then((deleteData) => {
-    console.log(deleteData);
-
     if (deleteData.affectedRows > 0) {
       return true;
     }
