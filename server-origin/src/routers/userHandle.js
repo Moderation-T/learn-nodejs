@@ -1,12 +1,21 @@
 const { userLogin } = require('../controllers/user');
-
+const { SuccessModel, FailModel } = require('../models/resModel');
 const userHandle = (req, res) => {
-  // 删除一篇博客
+  // 登陆设置
+
   if (req.method === 'POST' && req.path === '/api/user/login') {
     const postData = req.body;
-    const userMsgData = userLogin(postData);
+    console.log('postData', postData);
 
-    return userMsgData;
+    return userLogin(postData).then((user) => {
+      console.log('userMSG', user);
+
+      if (user.username) {
+        return new SuccessModel();
+      } else {
+        return new FailModel('登陆失败');
+      }
+    });
   }
 };
 
