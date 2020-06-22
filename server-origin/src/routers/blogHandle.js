@@ -25,8 +25,6 @@ const blogHandle = (req, res) => {
 
   // 新增一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/new') {
-    console.log(666);
-
     const postData = req.body;
 
     return newBlog(postData).then((newBlogData) => {
@@ -38,7 +36,7 @@ const blogHandle = (req, res) => {
   if (req.method === 'POST' && req.path === '/api/blog/update') {
     const id = req.query.id || '';
     const postData = req.body;
-    updateBlog(id, postData).then((updateBlogData) => {
+    return updateBlog(id, postData).then((updateBlogData) => {
       return new SuccessModel(updateBlogData);
     });
   }
@@ -46,7 +44,9 @@ const blogHandle = (req, res) => {
   // 删除一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/del') {
     const id = req.query.id || '';
-    deleteBlog(id).then((deleteBlogData) => {
+    return deleteBlog(id).then((deleteBlogData) => {
+      console.log(deleteBlogData);
+
       return new SuccessModel(deleteBlogData);
     });
   }

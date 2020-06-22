@@ -27,22 +27,48 @@ const getBlogDetail = (id) => {
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  const sql = `insert into blogs(title,content,createtime,author) values(${postData.title},${postData.content},${postData.createtime},${postData.author})`;
+  const sql = `insert into blogs (title,content,createtime,author) values ('${postData.title}','${postData.content}','${postData.createtime}','${postData.author}')`;
 
-  return exec(sql);
+  return exec(sql).then((insertData) => {
+    return {
+      id: insertData.insertId,
+    };
+  });
 };
 
 // 更新一条博客 接收 post 上来的数据 更新数据库中信息
 const updateBlog = (id, postData) => {
-  const sql = `update blogs set title=${postData.title},content=${postData.content},createtime=${postData.createtime},author=${postData.author} where id=${id}`;
+  const sql = `update blogs set title='${postData.title}',content='${postData.content}',createtime=${postData.createtime},author='${postData.author}' where id=${id}`;
+  console.log('update sql', sql);
 
-  return exec(sql);
+  // return exec(sql);
+  return exec(sql)
+    .then((updateData) => {
+      console.log('exec updateData', updateData);
+
+      if (updateData.affectedRows > 0) {
+        return true;
+      }
+      return false;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 // 删除一条博客 从数据库删除相应 id 的博客
 const deleteBlog = (id) => {
   const sql = `delete from blogs where id=${id}`;
-  return { id };
+  console.log(sql);
+
+  return exec(sql).then((deleteData) => {
+    console.log(deleteData);
+
+    if (deleteData.affectedRows > 0) {
+      return true;
+    }
+    return false;
+  });
 };
 
 module.exports = {

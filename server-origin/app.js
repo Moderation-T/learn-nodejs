@@ -40,29 +40,36 @@ const serverHandle = (req, res) => {
   req.query = querystring.parse(url.split('?')[1]);
 
   // 先获取 postData 的值放到 req.body 中去，然后里边的路由就可以从 req.body 中获取 post data 的值了
-  getPostData(req).then((postData) => {
-    req.body = postData;
-    console.log(postData);
+  getPostData(req)
+    .then((postData) => {
+      req.body = postData;
 
-    blogHandle(req, res).then((blogData) => {
-      if (blogData) {
-        res.end(JSON.stringify(blogData));
-        return;
-      }
+      blogHandle(req, res)
+        .then((blogData) => {
+          if (blogData) {
+            res.end(JSON.stringify(blogData));
+            return;
+          }
+        })
+        .catch((err) => {
+          console.log(2555555);
+        });
+
+      userHandle(req, res).then((userData) => {
+        if (userData) {
+          res.end(JSON.stringify(userData));
+          return;
+        }
+      });
+
+      // 找不到路由的处理
+      res.writeHead(404, { 'Content-type': 'text/plain' });
+      res.write('404 Not Found');
+      res.end();
+    })
+    .catch((err) => {
+      console.log(err);
     });
-
-    userHandle(req, res).then((userData) => {
-      if (userData) {
-        res.end(JSON.stringify(userData));
-        return;
-      }
-    });
-
-    // 找不到路由的处理
-    res.writeHead(404, { 'Content-type': 'text/plain' });
-    res.write('404 Not Found');
-    res.end();
-  });
 };
 
 module.exports = serverHandle;
