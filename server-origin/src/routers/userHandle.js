@@ -5,7 +5,6 @@ const userHandle = (req, res) => {
 
   if (req.method === 'POST' && req.path === '/api/user/login') {
     const postData = req.body;
-    console.log('postData', postData);
 
     return userLogin(postData).then((user) => {
       console.log('userMSG', user);

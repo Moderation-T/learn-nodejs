@@ -4,7 +4,7 @@ const userHandle = require('./src/routers/userHandle');
 
 // 使用 Promise 处理 postData
 const getPostData = (req) => {
-  return new Promise((resolve) => {
+  const promise = new Promise((resolve) => {
     // 如果不是 POST 方法 || Content-type = application/json 返回空对象
     if (req.method !== 'POST') {
       resolve({});
@@ -33,6 +33,8 @@ const getPostData = (req) => {
 
     // reject('错误');
   });
+
+  return promise;
 };
 
 const serverHandle = (req, res) => {
@@ -45,25 +47,37 @@ const serverHandle = (req, res) => {
   getPostData(req)
     .then((postData) => {
       req.body = postData;
+      console.log(2333);
 
-      userHandle(req, res).then((userData) => {
-        if (userData) {
-          res.end(JSON.stringify(userData));
-          return;
-        }
-      });
+      const blogResult = blogHandle(req, res);
+      console.log('blogResult', blogResult);
 
-      blogHandle(req, res).then((blogData) => {
-        if (blogData) {
-          res.end(JSON.stringify(blogData));
-          return;
-        }
-      });
+      if (blogResult) {
+        blogResult.then((blogData) => {
+          if (blogData) {
+            res.end(JSON.stringify(blogData));
+            return;
+          }
+        });
+      }
+
+      console.log(6666);
+      const userResult = userHandle(req, res);
+      console.log('userResult', userResult);
+
+      if (userResult) {
+        userResult.then((userData) => {
+          if (userData) {
+            res.end(JSON.stringify(userData));
+            return;
+          }
+        });
+      }
 
       // 找不到路由的处理
-      res.writeHead(404, { 'Content-type': 'text/plain' });
-      res.write('404 Not Found');
-      res.end();
+      // res.writeHead(404, { 'Content-type': 'text/plain' });
+      // res.write('404 Not Found');
+      // res.end();
     })
     .catch((err) => {
       console.log(err);
