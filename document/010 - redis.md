@@ -38,4 +38,13 @@ redisClient.on('error', (err) => {
 
 // 测试
 redisClient.set('myname', 'zhangsan2', redis.print);
+redisClient.get('myname', (err, val) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  console.log('val', val);
+});
+// 退出
+redisClient.quit();
 ```
