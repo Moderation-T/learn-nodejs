@@ -1,6 +1,7 @@
 const querystring = require('querystring');
 const blogHandle = require('./src/routers/blogHandle');
 const userHandle = require('./src/routers/userHandle');
+const { set, get } = require('./src/database/redis');
 
 // 使用 Promise 处理 postData
 const getPostData = (req) => {
@@ -41,16 +42,49 @@ const serverHandle = (req, res) => {
   res.setHeader('Content-type', 'application/json');
   const url = req.url;
   req.path = url.split('?')[0];
+
+  // 解析query
   req.query = querystring.parse(url.split('?')[1]);
 
-  // 先获取 postData 的值放到 req.body 中去，然后里边的路由就可以从 req.body 中获取 post data 的值了
-  getPostData(req)
+  // 解析 cookie
+  req.cookie = {};
+  const cookieStr = req.headers.cookie || '';
+  cookieStr.split(';').forEach((element) => {
+    if (!element) {
+      return;
+    }
+    const arr = element.split('=');
+    // 使用 HttpOnly 的时候，如果不去除空格会出现错误
+    req.cookie[arr[0].trim()] = arr[1].trim();
+  });
+
+  // 解析 session
+  let needSetCookie = false;
+  let userId = req.cookie.userId;
+  if (!userId) {
+    needSetCookie = true;
+    userId = `${Date.now()}_${Math.random()}`;
+    // 初始化 redis 中的 session 值
+    set(userId, {});
+  }
+
+  req.sessionId = userId;
+  get(req.sessionId)
+    .then((sessionData) => {
+      if (sessionData === null) {
+        set(req.sessionId, {});
+        req.session = {};
+      } else {
+        req.session = sessionData;
+      }
+
+      return getPostData(req);
+    })
     .then((postData) => {
+      // 先获取 postData 的值放到 req.body 中去，然后里边的路由就可以从 req.body 中获取 post data 的值了
       req.body = postData;
-      console.log(2333);
 
       const blogResult = blogHandle(req, res);
-      console.log('blogResult', blogResult);
 
       if (blogResult) {
         blogResult.then((blogData) => {
@@ -61,7 +95,6 @@ const serverHandle = (req, res) => {
         });
       }
 
-      console.log(6666);
       const userResult = userHandle(req, res);
       console.log('userResult', userResult);
 
