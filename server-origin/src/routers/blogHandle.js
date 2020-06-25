@@ -1,6 +1,14 @@
 const { getBlogList, getBlogDetail, newBlog, updateBlog, deleteBlog } = require('../controllers/blog');
 const { SuccessModel, FailModel } = require('../models/resModel');
 
+// 统一的登陆验证
+
+const loginCheck = (req) => {
+  if (!req.session.username) {
+    return Promise.resolve(new FailModel('尚未登陆'));
+  }
+};
+
 const blogHandle = (req, res) => {
   const id = req.query.id || '';
   const postData = req.body;
@@ -25,6 +33,11 @@ const blogHandle = (req, res) => {
 
   // 新增一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/new') {
+    const loginCheckResult = loginCheck(req);
+    if (loginCheckResult) {
+      return loginCheckResult;
+    }
+
     return newBlog(postData).then((newBlogData) => {
       return new SuccessModel(newBlogData);
     });
@@ -32,6 +45,11 @@ const blogHandle = (req, res) => {
 
   // 更新一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/update') {
+    const loginCheckResult = loginCheck(req);
+    if (loginCheckResult) {
+      return loginCheckResult;
+    }
+
     return updateBlog(id, postData).then((updateBlogData) => {
       return new SuccessModel(updateBlogData);
     });
@@ -39,7 +57,13 @@ const blogHandle = (req, res) => {
 
   // 删除一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/del') {
-    return deleteBlog(id).then((deleteBlogData) => {
+    const loginCheckResult = loginCheck(req);
+    if (loginCheckResult) {
+      return loginCheckResult;
+    }
+
+    const author = req.session.username;
+    return deleteBlog(id, author).then((deleteBlogData) => {
       return new SuccessModel(deleteBlogData);
     });
   }

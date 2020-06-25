@@ -50,8 +50,8 @@ const updateBlog = (id, postData) => {
 };
 
 // 删除一条博客 从数据库删除相应 id 的博客
-const deleteBlog = (id) => {
-  const sql = `delete from blogs where id=${id}`;
+const deleteBlog = (id, author) => {
+  const sql = `delete from blogs where id=${id} and author=${author}`;
 
   return exec(sql).then((deleteData) => {
     if (deleteData.affectedRows > 0) {

@@ -7,8 +7,12 @@ const userHandle = (req, res) => {
 
   if (req.method === 'POST' && req.path === '/api/user/login') {
     const postData = req.body;
+    
 
+    console.log('user postData is', postData);
     return userLogin(postData).then((user) => {
+      console.log('666 to select user');
+
       console.log('userMSG', user);
 
       if (user.username) {
