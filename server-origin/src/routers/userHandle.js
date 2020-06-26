@@ -7,14 +7,8 @@ const userHandle = (req, res) => {
 
   if (req.method === 'POST' && req.path === '/api/user/login') {
     const postData = req.body;
-    
 
-    console.log('user postData is', postData);
     return userLogin(postData).then((user) => {
-      console.log('666 to select user');
-
-      console.log('userMSG', user);
-
       if (user.username) {
         // 设置 session
         req.session.username = user.username;
@@ -23,7 +17,7 @@ const userHandle = (req, res) => {
         // 同步到 redis
         set(req.sessionId, req.session);
 
-        return new SuccessModel();
+        return new SuccessModel({ username: user.username });
       } else {
         return new FailModel('登陆失败');
       }

@@ -27,7 +27,9 @@ const getBlogDetail = (id) => {
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  const sql = `insert into blogs (title,content,createtime,author) values ('${postData.title}','${postData.content}','${postData.createtime}','${postData.author}')`;
+  // 
+  // 
+  const sql = `insert into blogs (title,content,createtime,author) values ('${postData.title}','${postData.content}','${12349867456456}','zhangwu')`;
 
   return exec(sql).then((insertData) => {
     return {

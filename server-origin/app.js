@@ -20,8 +20,6 @@ const getPostData = (req) => {
     // 处理 postData
     let postData = '';
     req.on('data', (chunk) => {
-      console.log('chunk', chunk);
-
       postData += chunk.toString();
     });
 
@@ -96,8 +94,6 @@ const serverHandle = (req, res) => {
           }
         });
       }
-
-      console.log('init postData', postData);
 
       const userResult = userHandle(req, res);
 
