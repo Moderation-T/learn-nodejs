@@ -3,6 +3,14 @@ const blogHandle = require('./src/routers/blogHandle');
 const userHandle = require('./src/routers/userHandle');
 const { set, get } = require('./src/database/redis');
 
+// 获取 cookie 的过期时间
+const getCookieExpires = () => {
+  const d = new Date();
+  d.setTime(d.getTime() + 24 * 60 * 60 * 1000);
+  console.log('d.toGMTString() is ', d.toGMTString());
+  return d.toGMTString();
+};
+
 // 使用 Promise 处理 postData
 const getPostData = (req) => {
   const promise = new Promise((resolve) => {
@@ -88,11 +96,14 @@ const serverHandle = (req, res) => {
 
       if (blogResult) {
         blogResult.then((blogData) => {
-          if (blogData) {
-            res.end(JSON.stringify(blogData));
-            return;
+          if (needSetCookie) {
+            res.setHeader('Set-Cookie', `userId=${userId};path=/;httpOnly;expires=${getCookieExpires()}`);
           }
+
+          res.end(JSON.stringify(blogData));
         });
+
+        return;
       }
 
       const userResult = userHandle(req, res);

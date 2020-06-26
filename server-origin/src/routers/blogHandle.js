@@ -33,10 +33,8 @@ const blogHandle = (req, res) => {
 
   // 新增一篇博客
   if (req.method === 'POST' && req.path === '/api/blog/new') {
-    console.log('new blog');
-    console.log(req.session);
-
     const loginCheckResult = loginCheck(req);
+
     if (loginCheckResult) {
       return loginCheckResult;
     }
