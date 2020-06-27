@@ -1,7 +1,9 @@
-const { exec } = require('../database/mysql');
+const { exec, escape } = require('../database/mysql');
 
 // 获取博客列表 支持 author 与 keyword 的筛选
 const getBlogList = (author, keyword) => {
+  author = escape(author);
+
   let sql = 'select * from blogs where 1=1 ';
 
   if (author) {
@@ -20,6 +22,7 @@ const getBlogList = (author, keyword) => {
 // 获取一篇博客的内容
 
 const getBlogDetail = (id) => {
+  id = escape(id);
   const sql = `select * from blogs where id=${id}`;
 
   return exec(sql);
@@ -27,9 +30,9 @@ const getBlogDetail = (id) => {
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  // 
-  // 
-  const sql = `insert into blogs (title,content,createtime,author) values ('${postData.title}','${postData.content}','${12349867456456}','zhangwu')`;
+  const title = escape(postData.title);
+  const content = escape(postData.content);
+  const sql = `insert into blogs (title,content,createtime,author) values ('${title}','${content}','${12349867456456}','zhangwu')`;
 
   return exec(sql).then((insertData) => {
     return {
@@ -40,7 +43,12 @@ const newBlog = (postData) => {
 
 // 更新一条博客 接收 post 上来的数据 更新数据库中信息
 const updateBlog = (id, postData) => {
-  const sql = `update blogs set title='${postData.title}',content='${postData.content}',createtime=${postData.createtime},author='${postData.author}' where id=${id}`;
+  const title = escape(postData.title);
+  const content = escape(postData.content);
+  const createtime = escape(postData.createtime);
+  const author = escape(postData.author);
+  id = escape(id);
+  const sql = `update blogs set title='${title}',content='${content}',createtime=${createtime},author='${author}' where id=${id}`;
 
   // return exec(sql);
   return exec(sql).then((updateData) => {
@@ -53,6 +61,8 @@ const updateBlog = (id, postData) => {
 
 // 删除一条博客 从数据库删除相应 id 的博客
 const deleteBlog = (id, author) => {
+  id = escape(id);
+  author = escape(author);
   const sql = `delete from blogs where id=${id} and author=${author}`;
 
   return exec(sql).then((deleteData) => {

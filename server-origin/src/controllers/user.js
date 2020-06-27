@@ -1,9 +1,9 @@
-const { exec } = require('../database/mysql');
+const { exec, escape } = require('../database/mysql');
 
 const userLogin = (userMsg) => {
-  const sql = `select username,password from users where username='${userMsg.username}' and password='${Number(
-    userMsg.password
-  )}'`;
+  const username = escape(userMsg.username);
+  const password = escape(userMsg.password);
+  const sql = `select username,password from users where username='${username}' and password='${Number(password)}'`;
   return exec(sql)
     .then((userData) => {
       return userData[0];
