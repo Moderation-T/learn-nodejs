@@ -51,7 +51,9 @@ const getPostData = (req) => {
 const serverHandle = (req, res) => {
   // 记录 access 日志
   access(
-    `${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${moment(Date.now()).format('YYYY-MM-DD:hh:mm:ss')}`
+    `${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${moment(Date.now()).format(
+      'YYYY-MM-DD:hh:mm:ss'
+    )} `
   );
 
   res.setHeader('Content-type', 'application/json');
