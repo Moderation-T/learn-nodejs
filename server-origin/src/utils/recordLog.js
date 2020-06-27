@@ -8,32 +8,34 @@ function writeLog(writeStream, log) {
 
 // 创建写入文件流的方法
 function createWriteStream(filename) {
-  const fullFileName = path.resolve(__dirname, '../', '../', 'logs');
-  const writeStream = fs.createWriteStream(fullFileName, { flags: 'a' });
+  const fullFileName = path.resolve(__dirname, '../', '../', 'logs', filename);
+  const writeStream = fs.createWriteStream(fullFileName, { flags: 'a' }, (err) => {
+    console.log(err);
+  });
 
   return writeStream;
 }
 
-// 写访问日志 
+// 写访问日志
 const accessWriteStream = createWriteStream('access.log');
 function access(log) {
-  writeLog( , log);
+  writeLog(accessWriteStream, log);
 }
 
-// 写事件日志 
-const accessWriteStream = createWriteStream('event.log');
+// 写事件日志
+const eventWriteStream = createWriteStream('event.log');
 function event(log) {
-  writeLog( , log);
+  writeLog(eventWriteStream, log);
 }
 
-// 写错误日志 
-const accessWriteStream = createWriteStream('error.log');
+// 写错误日志
+const errorWriteStream = createWriteStream('error.log');
 function error(log) {
-  writeLog( , log);
+  writeLog(errorWriteStream, log);
 }
 
 module.exports = {
   access,
-  event,
-  error
+  // event,
+  // error,
 };
