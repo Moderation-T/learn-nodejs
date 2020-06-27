@@ -31,8 +31,8 @@ const getBlogDetail = (id) => {
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  const title = escape(xss(postData.title));
-  const content = escape(postData.content);
+  const title = xss(postData.title);
+  const content = postData.content;
   const sql = `insert into blogs (title,content,createtime,author) values ('${title}','${content}','${12349867456456}','zhangwu')`;
 
   return exec(sql).then((insertData) => {
@@ -44,10 +44,10 @@ const newBlog = (postData) => {
 
 // 更新一条博客 接收 post 上来的数据 更新数据库中信息
 const updateBlog = (id, postData) => {
-  const title = escape(postData.title);
-  const content = escape(postData.content);
-  const createtime = escape(postData.createtime);
-  const author = escape(postData.author);
+  const title = postData.title;
+  const content = postData.content;
+  const createtime = postData.createtime;
+  const author = postData.author;
   id = escape(id);
   const sql = `update blogs set title='${title}',content='${content}',createtime=${createtime},author='${author}' where id=${id}`;
 
@@ -62,8 +62,6 @@ const updateBlog = (id, postData) => {
 
 // 删除一条博客 从数据库删除相应 id 的博客
 const deleteBlog = (id, author) => {
-  id = escape(id);
-  author = escape(author);
   const sql = `delete from blogs where id=${id} and author=${author}`;
 
   return exec(sql).then((deleteData) => {
