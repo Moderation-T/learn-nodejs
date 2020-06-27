@@ -1,4 +1,5 @@
 const { exec, escape } = require('../database/mysql');
+const xss = require('xss');
 
 // 获取博客列表 支持 author 与 keyword 的筛选
 const getBlogList = (author, keyword) => {
@@ -30,7 +31,7 @@ const getBlogDetail = (id) => {
 
 // 新增一条博客 接收 post 上来的数据 向数据库中插入一条信息
 const newBlog = (postData) => {
-  const title = escape(postData.title);
+  const title = escape(xss(postData.title));
   const content = escape(postData.content);
   const sql = `insert into blogs (title,content,createtime,author) values ('${title}','${content}','${12349867456456}','zhangwu')`;
 
