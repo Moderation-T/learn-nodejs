@@ -9,9 +9,7 @@ function writeLog(writeStream, log) {
 // 创建写入文件流的方法
 function createWriteStream(filename) {
   const fullFileName = path.resolve(__dirname, '../', '../', 'logs', filename);
-  const writeStream = fs.createWriteStream(fullFileName, { flags: 'a' }, (err) => {
-    console.log(err);
-  });
+  const writeStream = fs.createWriteStream(fullFileName, { flags: 'a' });
 
   return writeStream;
 }
