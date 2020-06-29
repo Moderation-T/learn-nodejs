@@ -23,3 +23,6 @@ app.use(
   })
 );
 ```
+
+- morgan
+> access log 记录，直接使用脚手架推荐的 morgan

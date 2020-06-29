@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { getBlogList, getBlogDetail, newBlog, updateBlog, deleteBlog } = require('../controllers/blog');
+const loginCheck = require('../middleware/loginCheck');
 const { SuccessModel, FailModel } = require('../models/resModel');
 
 /* GET home page. */
@@ -21,6 +22,13 @@ router.get('/list', function (req, res, next) {
 router.get('/detail', function (req, res, next) {
   return getBlogDetail(req.query.id).then((detailData) => {
     res.json(new SuccessModel(detailData));
+  });
+});
+
+router.post('/new', loginCheck, function (req, res, next) {
+  const postData = req.body;
+  return newBlog(postData).then((newBlogData) => {
+    res.json(new SuccessModel(newBlogData));
   });
 });
 
