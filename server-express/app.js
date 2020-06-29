@@ -4,9 +4,12 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 // 自动生成日志的插件
 const logger = require('morgan');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
 
 // 引入路由
-const blogRouter = require('./routes/blog');
+const blogRouter = require('./src/routes/blog');
+const userRouter = require('./src/routes/user');
 
 const app = express();
 
@@ -22,9 +25,25 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // app.use(express.static(path.join(__dirname, 'public')));
+const redisClient = require('./src/database/redis');
+const sessionStore = new RedisStore({
+  client: redisClient,
+});
+app.use(
+  session({
+    secret: 'Ai434*&244_',
+    cookie: {
+      // path: '/', // 默认设置
+      // httpOnly: true, // 默认设置
+      maxAge: 24 * 60 * 60 * 1000, // 有效时间 24h
+    },
+    store: sessionStore,
+  })
+);
 
 // 注册路由
 app.use('/api/blog', blogRouter);
+app.use('/api/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -43,6 +62,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
-
-
