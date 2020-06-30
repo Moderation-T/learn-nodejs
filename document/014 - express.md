@@ -25,4 +25,23 @@ app.use(
 ```
 
 - morgan
-> access log 记录，直接使用脚手架推荐的 morgan
+  > access log 记录，直接使用脚手架推荐的 morgan
+
+```js
+const ENV = process.env.NODE_ENV;
+if (ENV !== 'production') {
+  // 开发环境 / 测试环境
+  app.use(logger('dev'));
+} else {
+  // 线上环境
+  const logFileName = path.join(__dirname, 'src', 'logs', 'access.log');
+  const writeStream = fs.createWriteStream(logFileName, {
+    flags: 'a',
+  });
+  app.use(
+    logger('combined', {
+      stream: writeStream,
+    })
+  );
+}
+```
