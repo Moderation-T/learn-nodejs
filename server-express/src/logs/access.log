@@ -1,2 +1,0 @@
-::1 - - [30/Jun/2020:03:43:28 +0000] "POST /api/user/login HTTP/1.0" 200 45 "http://127.0.0.1:8080/html-test/login.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
-::ffff:127.0.0.1 - - [30/Jun/2020:03:43:28 +0000] "GET /api/blog/list?isadmin=1 HTTP/1.0" 200 1778 "http://127.0.0.1:8080/html-test/admin.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
