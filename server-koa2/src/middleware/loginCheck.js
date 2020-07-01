@@ -1,11 +1,12 @@
 const { FailModel } = require('../models/resModel');
+const { createContext } = require('../../app');
 
-const loginCheck = (req, res, next) => {
-  if (req.session.username) {
-    next();
+const loginCheck = async (ctx, next) => {
+  if (ctx.session.username) {
+    await next();
     return;
   }
-  res.json(new FailModel('未登录'));
+  ctx.body = new FailModel('未登录');
 };
 
 module.exports = loginCheck;

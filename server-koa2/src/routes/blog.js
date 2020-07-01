@@ -21,7 +21,7 @@ router.get('/detail', async (ctx, next) => {
   ctx.body = new SuccessModel(detailData);
 });
 
-router.post('/new', async (ctx, next) => {
+router.post('/new', loginCheck, async (ctx, next) => {
   const postData = ctx.request.body;
 
   const newBlogData = await newBlog(postData);
