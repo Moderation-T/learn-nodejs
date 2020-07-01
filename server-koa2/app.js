@@ -9,6 +9,7 @@ const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
 const path = require('path');
 const morgan = require('koa-morgan');
+const fs = require('fs');
 
 const user = require('./src/routes/user');
 const blog = require('./src/routes/blog');

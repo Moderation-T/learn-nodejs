@@ -25,6 +25,7 @@
 - redis
 
   > brew install redis
+  > 启动 `redis-server`
 
 - nodejs 连接 redis
 
