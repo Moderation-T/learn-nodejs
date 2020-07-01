@@ -1,57 +1,31 @@
-const router = require('koa-router')()
-
-router.get('/', async (ctx, next) => {
-  await ctx.render('index', {
-    title: 'Hello Koa 2!'
-  })
-})
-
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
-})
-
-router.get('/json', async (ctx, next) => {
-  ctx.body = {
-    title: 'koa2 json'
-  }
-})
-
-module.exports = router
-
-
-var express = require('express');
-var router = express.Router();
+const router = require('koa-router')();
 const { getBlogList, getBlogDetail, newBlog, updateBlog, deleteBlog } = require('../controllers/blog');
 const loginCheck = require('../middleware/loginCheck');
 const { SuccessModel, FailModel } = require('../models/resModel');
 
-/* GET home page. */
+router.prefix('/api/blog');
+
 // 获取博客列表
-router.get('/list', function (req, res, next) {
-  const author = req.query.author || '';
-  const keyword = req.query.keyword || '';
+router.get('/list', async (ctx, next) => {
+  const author = ctx.query.author || '';
+  const keyword = ctx.query.keyword || '';
 
-  return getBlogList(author, keyword).then((listData) => {
-    console.log('getBlogList is ', listData);
+  const listData = await getBlogList(author, keyword);
 
-    listData = JSON.parse(JSON.stringify(listData));
-    res.json(new SuccessModel(listData));
-  });
+  ctx.body = new SuccessModel(listData);
 });
 
 // 获取单个博客信息
-router.get('/detail', function (req, res, next) {
-  return getBlogDetail(req.query.id).then((detailData) => {
-    res.json(new SuccessModel(detailData));
-  });
+router.get('/detail', async (ctx, next) => {
+  const detailData = await getBlogDetail(ctx.query.id);
+  ctx.body = new SuccessModel(detailData);
 });
 
-router.post('/new', loginCheck, function (req, res, next) {
-  const postData = req.body;
-  return newBlog(postData).then((newBlogData) => {
-    res.json(new SuccessModel(newBlogData));
-  });
+router.post('/new', async (ctx, next) => {
+  const postData = ctx.request.body;
+
+  const newBlogData = await newBlog(postData);
+  ctx.body = new SuccessModel(newBlogData);
 });
 
 module.exports = router;
-
