@@ -9,11 +9,10 @@ router.post('/login', async function (ctx, next) {
   const user = await userLogin(postData);
 
   if (user.username) {
-    console.log('has username is ', user.username);
 
     // 设置 session
-    // ctx.session.username = user.username;
-    // ctx.session.password = user.password;
+    ctx.session.username = user.username;
+    ctx.session.password = user.password;
 
     ctx.body = new SuccessModel({ username: user.username });
   } else {
